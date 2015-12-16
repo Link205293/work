@@ -18,6 +18,8 @@ int score = 0;
 //used for pause methods
 float [] boatTemp = {0,0,0,0,0};
 float [] squidTemp = {0,0,0,0,0,0,0,0};
+float [] crabTempDX = new float[4];
+float [] crabTempDY = new float[4];
 void setup()
 {
   size(1200, 675);
@@ -56,20 +58,30 @@ void reset()
 
 void draw ()
 {
-  scene();
-  display();
-  if(key == 'a')
+  
+  if(key =='v')
   {
-    boatReport( 50, Fleet, Fleet.length);
-    squidReport( 250, squad, squad.length);
-    crabReport(450, GS, GS.length);
+    help();
   }
-  else movement();
+  else
+   {
+    scene();
+    display();
+    if(key == 'a')
+    {
+      boatReport( 50, Fleet, Fleet.length);
+      squidReport( 250, squad, squad.length);
+      crabReport(450, GS, GS.length);
+    }
+    
+    else movement();
+   }
 }
 
 // displays the background
 void scene()
 {
+  
   // sky
   background(#29D2FF);
   // sun
@@ -86,6 +98,7 @@ void scene()
   noStroke();
   rect(0, waterline, width, height- waterline);
   text( "SCORE:  "+score, width*3/4, 20 );
+  messages();
 }
 
 //move all of the objects
@@ -117,6 +130,28 @@ void movement()
    
 }
 
+void messages()
+{
+  fill(0);
+  text("Garrett Stoddard", 50, height- 25);
+  text(" press v for help", 50, 25);
+}
+void help()
+{
+  background(255);
+  fill(0);
+  text("press B to sort boats by X position", 50, 100);
+  text("press D to sort boats by DX", 50, 125);
+  text("press F to sort boats by cargo", 50, 150);
+  text("press X to sort squids by X position", 50, 175);
+  text("press Y to sort squids by Y position", 50, 200);
+  text("press S to sort squids by speed",50, 225);
+  text("press L to sort squids by number of legs", 50, 250);
+  text("press a to display a list pre-sort, or a list post sort", 50, 300);
+  text("after observing the list press m to resume movement", 50, 325);
+  text("press any button to close", 50, 400);
+  
+}
 // shows all of the objects
 void display()
 {
@@ -829,6 +864,13 @@ void pause()
     squidTemp[j] = squad[j].squidDY;
     squad[j].squidDY = 0;
   }
+  for(int i = 0; i < GS.length; i++)
+  {
+    crabTempDX[i] = GS[i].crabDX;
+    crabTempDY[i] = GS[i].crabDY;
+    GS[i].crabDX = 0;
+    GS[i].crabDY = 0;
+  }
 }
 
 void resume()
@@ -845,6 +887,14 @@ void resume()
     if(squidTemp[k] != 0)
     {
       squad[k].squidDY = squidTemp[k];
+    }
+  }
+  for(int i = 0; i < GS.length; i++)
+  {
+    if(crabTempDX[i] !=0 && crabTempDY[i]!= 0)
+    {
+      GS[i].crabDX = crabTempDX[i];
+      GS[i].crabDY = crabTempDY[i];
     }
   }
 }
